@@ -15,9 +15,12 @@ def create(request):
 
     article = Article(title=title, content=content)
     article.save()
-    return redirect('products:product_list')
+    return redirect('products:product_detail', article.id)
 
-
+def product_detail(request, pk):
+    article = Article.objects.get(pk=pk)
+    context = {"article" : article}
+    return render(request, 'products/product_detail.html', context)
 
 
 

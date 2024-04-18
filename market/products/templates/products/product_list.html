@@ -2,15 +2,16 @@
 
 {% block content %}
     <h1>Product List</h1>
+    <a href="{% url 'products:new' %}">새 글 작성</a>
 
     <ul>
         {% for article in articles %}
             <li>
-                <div>글 번호 : {{ article.id }}</div>
-                <div>글 제목 : {{ article.title }}</div>
-                <div>글 내용 : {{ article.content }}</div>
-                <hr>
+                <a href="{% url 'products:product_detail' article.id %}">
+                    <div>[{{article.id}}] {{article.title}}</div>
+                </a>
+                <br>
             </li>
         {% endfor %}
     </ul>
-{% endblock content %}
+{% endblock content %}                                                      
