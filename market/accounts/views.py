@@ -36,7 +36,12 @@ def signup(request):
     context = {"form" : form}
     return render(request, "accounts/signup.html", context)
 
-
+@require_POST
+def leave(request):
+    if request.user.is_authenticated:
+        request.user.delete()
+        auth_logout(request)
+    return redirect('accounts:home')
 
 
 
