@@ -22,5 +22,13 @@ def product_detail(request, pk):
     context = {"article" : article}
     return render(request, 'products/product_detail.html', context)
 
+def delete(request, pk):
+    article = Article.objects.get(pk=pk)
+    if request.method == "POST":
+        article.delete()
+        return redirect('products:product_list')
+    return redirect('products:product_detail', article.pk)
+
+
 
 
