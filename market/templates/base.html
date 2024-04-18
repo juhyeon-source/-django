@@ -14,7 +14,7 @@
                 {% csrf_token %}
                 <input type="submit" value="로그아웃">
             </form>
-
+            <a href="{% url 'accounts:update' %}">회원정보수정</a>
             <form action="{% url 'accounts:leave' %}" method="POST">
                 {% csrf_token %}
                 <input type="submit" value="회원탈퇴">

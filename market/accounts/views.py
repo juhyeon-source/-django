@@ -1,8 +1,12 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import (
+    AuthenticationForm, 
+    UserCreationForm,)
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.views.decorators.http import require_POST, require_http_methods
+from .forms import CustomUserChangeForm
+
 
 def home(request):
     return render(request, 'accounts/home.html')
@@ -24,6 +28,7 @@ def logout(request):
     auth_logout(request)
     return redirect("accounts:home")
 
+@require_http_methods(["GET","POST"])
 def signup(request):
     if request.method == "POST":
         form = UserCreationForm(request.POST)
@@ -43,5 +48,15 @@ def leave(request):
         auth_logout(request)
     return redirect('accounts:home')
 
-
+@require_http_methods(["GET","POST"])
+def update(request):
+    if request.method == "POST":
+        form = CustomUserChangeForm(request.POST, instance=request.user)
+        if form.is_valid:
+            form.save()
+            return redirect('accounts:home')
+    else:
+        form = CustomUserChangeForm(instance=request.user)
+    context = {"form" : form}
+    return render(request, 'accounts/update.html', context)
 
