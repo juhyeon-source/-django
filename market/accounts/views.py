@@ -6,7 +6,7 @@ from django.contrib.auth.forms import (
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.views.decorators.http import require_POST, require_http_methods
-from .forms import CustomUserChangeForm
+from .forms import CustomUserChangeForm, CustomUserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 
@@ -32,13 +32,13 @@ def logout(request):
 @require_http_methods(["GET","POST"])
 def signup(request):
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             auth_login(request, user)
             return redirect("products:product_list")
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
     context = {"form" : form}
     return render(request, "accounts/signup.html", context)
 
