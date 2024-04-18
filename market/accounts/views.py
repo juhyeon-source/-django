@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import (
     AuthenticationForm, 
-    UserCreationForm,)
+    UserCreationForm,
+    PasswordChangeForm,)
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.views.decorators.http import require_POST, require_http_methods
 from .forms import CustomUserChangeForm
-
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import update_session_auth_hash
 
 def home(request):
     return render(request, 'accounts/home.html')
@@ -25,7 +27,8 @@ def login(request):
 
 @require_POST
 def logout(request):
-    auth_logout(request)
+    if request.user.is_authenticated:
+        auth_logout(request)
     return redirect("accounts:home")
 
 @require_http_methods(["GET","POST"])
@@ -59,4 +62,24 @@ def update(request):
         form = CustomUserChangeForm(instance=request.user)
     context = {"form" : form}
     return render(request, 'accounts/update.html', context)
+
+@login_required
+@require_http_methods(["GET", "POST"])
+def change_password(request):
+    if request.method == "POST":
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            return redirect('accounts:home')
+    else:
+        form = PasswordChangeForm(request.user)
+    context = {"form" : form}
+    return render(request, 'accounts/change_password.html', context)
+
+
+
+
+
+
 
