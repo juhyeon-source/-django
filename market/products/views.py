@@ -1,21 +1,23 @@
 from django.shortcuts import render, redirect
 from .models import Article
+from .forms import ArticleForm
 
 def product_list(request):
     articles = Article.objects.all().order_by('-id')
     context = {"articles" : articles,}
     return render(request, 'products/product_list.html', context)
 
-def new(request):
-    return render(request, 'products/new.html')
-
 def create(request):
-    title = request.POST.get('title')
-    content = request.POST.get('content')
+    if request.method == "POST":
+        form = ArticleForm(request.POST)
+        if form.is_valid():
+            article = form.save()
+            return redirect("products:product_detail", article.id)
+    else:
+        form = ArticleForm()
 
-    article = Article(title=title, content=content)
-    article.save()
-    return redirect('products:product_detail', article.id)
+    context = {"form": form}
+    return render(request, "products/create.html", context)
 
 def product_detail(request, pk):
     article = Article.objects.get(pk=pk)
@@ -29,17 +31,20 @@ def delete(request, pk):
         return redirect('products:product_list')
     return redirect('products:product_detail', article.pk)
 
-def edit(request, pk):
-    article = Article.objects.get(pk=pk)
-    context = {"article" : article}
-    return render(request, 'products/edit.html', context)
-
 def update(request, pk):
     article = Article.objects.get(pk=pk)
-    article.title = request.POST.get('title')
-    article.content = request.POST.get('content')
-    article.save()
-    return redirect('products:product_detail', article.pk)
+    if request.method == "POST":
+        form = ArticleForm(request.POST, instance=article)
+        if form.is_valid():
+            article = form.save()
+            return redirect("products:product_detail", article.pk)
+    else:
+        form = ArticleForm(instance=article)
+    context = {
+        "form": form,
+        "article": article,
+    }
+    return render(request, "products/update.html", context)
 
 
 

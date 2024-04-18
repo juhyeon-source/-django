@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>'{{article.title}}' 작성 완료</h1>
-    <a href="{% url 'products:product_list' %}">목록으로</a>
+    <h1>NEW ARTICLE</h1>
+
+    <form action="{% url 'products:create' %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">저장</button>
+    </form>
 {% endblock content %}
