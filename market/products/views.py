@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Article
 
 def product_list(request):
@@ -15,10 +15,7 @@ def create(request):
 
     article = Article(title=title, content=content)
     article.save()
-    context = {
-        "article" : article,
-    }
-    return render(request, 'products/create.html', context)
+    return redirect('products:product_list')
 
 
 
