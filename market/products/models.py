@@ -11,3 +11,16 @@ class Article(models.Model):
 
     def __str__(self):
         return self.title
+    
+    like_users = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name='like_articles'
+    )
+    
+
+class ArticleLike(models.Model):
+    article = models.ForeignKey(
+        Article, on_delete=models.CASCADE, related_name="likes"
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="likes"
+    )

@@ -8,5 +8,6 @@ urlpatterns = [
     path('<int:pk>/', views.product_detail, name='product_detail'),
     path('<int:pk>/delete/', views.delete, name='delete'),
     path('<int:pk>/update/', views.update, name='update'),
-
+    path('<int:pk>/like/', views.like, name='like'),
+    
 ]
