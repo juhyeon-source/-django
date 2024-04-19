@@ -2,16 +2,28 @@
 
 {% block content %}
     <h1>Product List</h1>
+    {% comment %} <a href="{% url 'accounts:profile' username=member.username %}">내 프로필 페이지로 가기</a> {% endcomment %}
     <a href="{% url 'products:create' %}">새 글 작성</a>
 
     <ul>
         {% for article in articles %}
+        
             <li>
                 <a href="{% url 'products:product_detail' article.id %}">
                     <div>[{{article.id}}] {{article.title}}</div>
                 </a>
                 <br>
             </li>
+
+            <form action="{% url 'products:like' article.pk %}" method="POST">
+                {% csrf_token %}
+                {% if user in article.like_users.all %}
+                    <input type="submit" value='좋아요 취소'>
+                {% else %}
+                    <input type="submit" value='좋아요'>
+                {% endif %}
+            </form>
+
         {% endfor %}
     </ul>
 {% endblock content %}                                                      

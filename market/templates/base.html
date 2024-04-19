@@ -19,6 +19,7 @@
                 {% csrf_token %}
                 <input type="submit" value="회원탈퇴">
             </form>
+            <a href="{% url 'accounts:profile' request.user.username %}">내 프로필 페이지로 가기</a>
         {% else %}
             <a href="{% url 'accounts:login' %}">로그인</a>
             <a href="{% url 'accounts:signup' %}">회원가입</a>
