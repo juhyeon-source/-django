@@ -84,7 +84,7 @@ def users(request):
 
 
 def profile(request, username):
-    member = get_object_or_404(get_user_model(), username=username)
+    member = get_object_or_404(get_user_model(), username=username) # 1. 유저 모델,  2. 유저네임
     context = {
         "member": member,
     }
