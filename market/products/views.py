@@ -2,10 +2,16 @@ from django.shortcuts import get_object_or_404, render, redirect
 from .models import Article
 from .forms import ArticleForm
 from django.views.decorators.http import require_POST, require_http_methods
+from django.contrib.auth import get_user_model
+
 
 def product_list(request):
     articles = Article.objects.all().order_by('-id')
-    context = {"articles" : articles,}
+    # member = get_object_or_404(get_user_model(), username=username)
+    context = {
+        "articles" : articles,
+        # "member" : member,
+    }
     return render(request, 'products/product_list.html', context)
 
 @require_http_methods(["GET", "POST"])
